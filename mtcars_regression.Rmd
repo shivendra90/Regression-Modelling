@@ -1,0 +1,58 @@
+---
+title: "Dissecting the Relationship between Fuel Efficiency (MPG) and Transmission Mode (AT/MT)"
+author: "Shivendra Sharma"
+date: "28/02/2017"
+output: pdf_document
+---
+
+```{r setup, include=FALSE, cache = T}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(cache = TRUE)
+library(ggplot2); library(dplyr); library(gvlma); library(car)
+```
+### Synopsis
+The `mtcars` data is an inbuilt dataset that comes with the `datasets` package and can be easily loaded up with the `mtcars` command. Its a fairly simple dataset that lists down 11 characteristics of 32 automobiles used by Henderson and Velleman in their book *Biometrics (1981)*. The data was extracted from the 1974 edition of the *Motor Trend* magazine and contains automobiles manufactured from 1973-74. This exercise will involve the same dataset to look into the relationship between an automobile's performance (MPG) with the mode of transmission (auto or manual) and conclude on which transmission is seemingly the better option. **Plots have been shown under appendix only.**
+
+### Selecting the Best Regression Model
+Strategizing on selecting the best regression model is an essential task for anyone to conduct an efficient analysis. However, there is no specific regression model in general except for such situations and data where the researcher has either binomial observations or data different from general observations (dummy variables, categorical, etc.). In such cases, most researchers go ahead with just simple linear models modified to contain interactions and multiple variables to explain relationships; it all depends on the type of data and hence, an exploratory analysis is one of the first few steps.
+
+### Exploratory Analysis
+A summary of our automobiles dataset should reveal the necessary details for each variable:
+```{r summary}
+summary(mtcars)
+```
+Our areas of importance would be the `mpg` variable and the `am` variable that might seem confusing at first but basically comprises of zeroes and ones that relate to automatic or manual transmission respectively. In fact, the following code will suggest that the dataset is somewhat biased towards automatic automobiles.
+```{r compare}
+table(mtcars$am)
+```
+There are 19 vehicles with automatic transmission and 13 for manual; although the difference ain't that much, regression for automatic vehicles will fit more precisely as compared to manual cars.
+
+### Analysing Model Fits
+With the essentials of exploratory analysis done, a brief regression analysis will follow. We'll use the simple linear model with `am` as a factorised predictor. The predictor here is a binomial variable but it should be noted that the outcome is not. So, although binomial regression too can be used here, it will require `mpg` to be divided by 100 since the latter model requires $y$ or the outcome to have values between 0 and 1.
+```{r regress}
+fit <- lm(mpg ~ factor(am) - 1, data = mtcars)
+fit2 <-glm(mpg ~ factor(am), data = mtcars)
+summary(fit)$coeff
+summary(fit2)$coeff
+```
+The first fit gives us the exact coefficients that we want. Although the intercept for the second model is the same as the coefficient for automatic transmission `(am)0`, adding the coefficient of (am)1 will give us the actual value for manual transmission (for the latter fit). And so, there we have it, efficiency of vehicles according to transmission mode. Manual cars seem to be more comparably efficient than manual ones simply because automatic cars consume more fuel per mileage. Of course, there are are other statistics of importance here; minute p-values for both the fits suggest proper coefficient values and low chances of comitting errors and t-values that suggest that the estimated values are significant and close to the studentized values.
+
+\newpage
+## Appendix
+Several methods exist to diagnose linear models; some can be advanced and require knowledge regarding their use and interpretation while others are more standardised and globally used. The `gvlma` package comes really handy here since it carries out a number of tests with just one command, like so:
+```{r tests, echo = T, cache = T}
+gv <- gvlma(fit)
+gv
+```
+The `gvlma()` conducts a global assumptions test that lists down the necessary assumptions and whether they can be accepted or not, as can be seen above. Our fit is thus acceptable in almost all of the tests carried out. Similar, more advanced tests can be carried out too like Bonferroni's test of influential observations, influence plots, Durbin-Watson test, etc. For example, here's a simple influence plot for the fitted model, although I would doubt if everything is showing up correctly.
+```{r influence, echo = T, cache = T, fig.width = 10, fig.height = 5}
+influencePlot(fit, main = 'Influence Plot')
+```
+Similarly, a simple residual plot like below:
+```{r resid plot, cache = T, fig.height = 5, fig.width = 10}
+residualPlot(fit)
+```
+Finally, we can have lots of diagnostic plots that cannot be plotted with conventional commands.
+```{r plot, cache = T, fig.height = 5, fig.width = 10}
+plot(fit)
+```

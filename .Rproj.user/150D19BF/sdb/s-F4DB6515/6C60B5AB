@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1488468858989.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "6C60B5AB",
+    "lastKnownWriteTime" : 4322337328,
+    "last_content_update" : 1488468858989,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "4467EC5C",
+        "caption" : "shuttle.test",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=shuttle.test&cache_key=4467EC5C",
+        "displayedObservations" : "256",
+        "environment" : "",
+        "object" : "shuttle.test",
+        "preview" : "0",
+        "totalObservations" : "256",
+        "variables" : "7"
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}
