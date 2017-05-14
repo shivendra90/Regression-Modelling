@@ -19,4 +19,4 @@ The `mtcars` dataset consists of 11 ariables for 32 observations. Since the data
 
 Much of the analysis is already available in the PDF document, including relevant results, methods used, description of variables, etc. Although the overall method may not be perfect, it provides a visible fact that manual cars are more efficient than automatic vehicles. This is also evident from the diagnostics and residual plots included in the appendix of the main document, suggesting that most estimations and predictions have been represented with as much accuracy as possible.
 
-**This readme document a work in progress.**
+**This readme is a work in progress.**
